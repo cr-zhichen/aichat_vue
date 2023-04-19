@@ -65,7 +65,8 @@ button:focus-visible {
 
 #homePage,
 #loginPage,
-#registerPage {
+#registerPage,
+#userPage {
 
     margin: 10% 10%;
 
@@ -81,7 +82,8 @@ button:focus-visible {
 
 #homePage .box-card,
 #loginPage .box-card,
-#registerPage .box-card {
+#registerPage .box-card
+#userPage .box-card {
     margin: 0 auto;
     padding: 100px 10px;
 }
@@ -93,15 +95,17 @@ button:focus-visible {
 
 
 /*适配手机宽度*/
-@media screen and (max-width: 920px) {
+@media screen and (max-width: 600px) {
     #homePage,
     #loginPage,
-    #registerPage {
+    #registerPage,
+    #userPage {
         margin: 1% 1%;
     }
 
     #loginPage .box-card,
-    #registerPage .box-card {
+    #registerPage .box-card,
+    #userPage .box-card {
         padding: 20px 20px;
     }
 }
@@ -110,12 +114,14 @@ button:focus-visible {
 @media screen and (max-height: 600px) {
     #homePage,
     #loginPage,
-    #registerPage {
+    #registerPage,
+    #userPage {
         margin: 1% 1%;
     }
 
     #loginPage .box-card,
-    #registerPage .box-card {
+    #registerPage .box-card
+    #userPage .box-card {
         padding: 20px 20px;
     }
 }

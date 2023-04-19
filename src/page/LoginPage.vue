@@ -5,7 +5,11 @@ import {useGoToChat, useGoToRegister} from "../router/goToRouter.js";
 import {loginTask} from "../tool/httpRequest.js";
 import {ElLoading, ElNotification} from "element-plus";
 
-globalState.activeIndex = '2';
+if (globalState.showLogin === true) {
+    globalState.activeIndex = '3';
+} else {
+    globalState.activeIndex = '2';
+}
 
 const goToChat = useGoToChat();
 
@@ -57,6 +61,7 @@ const login = ref(async (formEl) => {
                         message: '欢迎使用AICHAT',
                         type: 'success',
                     })
+                    globalState.showLogin = false;
                     goToChat();
                 },
                 (o) => {

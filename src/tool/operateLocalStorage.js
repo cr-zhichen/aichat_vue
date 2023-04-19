@@ -1,4 +1,6 @@
 //从本地存储获取Token
+import {globalState} from "../global/globalState.js";
+
 export function getToken() {
     let token = localStorage.getItem("token");
     if (!token) {
@@ -30,5 +32,7 @@ export function setRole(role) {
 
 //删除全部本地存储
 export function clearAll() {
-    localStorage.clear();
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    globalState.showLogin = false;
 }

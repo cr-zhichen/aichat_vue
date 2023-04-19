@@ -11,10 +11,12 @@ import {globalState} from "../global/globalState.js";
 import {getToken} from "../tool/operateLocalStorage.js";
 import {touristsTask} from "../tool/httpRequest.js";
 import {ElLoading, ElNotification} from "element-plus";
+import {useGoToChat} from "../router/goToRouter.js";
 
 globalState.activeIndex = '1';
 
 const loading = ref(null);
+const goToChat = useGoToChat();
 
 //vue加载完后执行
 onMounted(() => {
@@ -31,10 +33,10 @@ onMounted(() => {
             },
             (o) => {
                 ElNotification({
-                    title: '登录成功',
-                    message: '欢迎使用AICHAT',
+                    title: '欢迎使用AICHAT',
                     type: 'success',
                 })
+                globalState.showLogin = true;
             },
             (o) => {
                 ElNotification({

@@ -5,7 +5,11 @@ import {useGoToChat, useGoToLogin} from "../router/goToRouter.js";
 import {ElLoading, ElNotification} from "element-plus";
 import {registerTask, resetTask, sendCodeTask} from "../tool/httpRequest.js";
 
-globalState.activeIndex = '2';
+if (globalState.showLogin === true) {
+    globalState.activeIndex = '3';
+} else {
+    globalState.activeIndex = '2';
+}
 
 const loading = ref(null);
 
