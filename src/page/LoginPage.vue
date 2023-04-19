@@ -1,9 +1,13 @@
 <script setup>
 import {globalState} from "../global/globalState.js";
 import {reactive, ref} from "@vue/reactivity";
-import {useGoToRegister} from "../router/goToRouter.js";
+import {useGoToChat, useGoToRegister} from "../router/goToRouter.js";
+import {loginTask} from "../tool/httpRequest.js";
+import {ElLoading, ElNotification} from "element-plus";
 
 globalState.activeIndex = '2';
+
+const goToChat = useGoToChat();
 
 const loginForm = reactive({
     email: '',
@@ -30,12 +34,42 @@ const loginRules = reactive(
     }
 )
 
+const loading = ref(null);
 const login = ref(async (formEl) => {
     if (!formEl) return
     await formEl.validate((valid, fields) => {
         if (valid) {
-            //这里写登录逻辑
-            console.log(loginForm)
+            loginTask(
+                {
+                    email: loginForm.email,
+                    passwordMd5: loginForm.password
+                },
+                () => {
+                    loading.value = ElLoading.service({
+                        lock: true,
+                        text: 'Loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                    })
+                },
+                (o) => {
+                    ElNotification({
+                        title: '登录成功',
+                        message: '欢迎使用AICHAT',
+                        type: 'success',
+                    })
+                    goToChat();
+                },
+                (o) => {
+                    ElNotification({
+                        title: '登录失败',
+                        message: o,
+                        type: 'error',
+                    })
+                },
+                () => {
+                    loading.value.close();
+                }
+            )
         }
     })
 });
