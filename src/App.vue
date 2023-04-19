@@ -8,14 +8,19 @@ import Menu from "./components/Menu.vue";
 <template>
 
 
-    <Menu/>
+    <Menu id="app-menu"/>
     <router-view/>
-
-  <!--返回顶部-->
-    <el-backtop :right="100" :bottom="100"/>
 
 </template>
 
 <style scoped>
+
+#app-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
 
 </style>
