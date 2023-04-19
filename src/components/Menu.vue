@@ -2,12 +2,12 @@
 import {ref} from 'vue'
 import {getThemeName, setTheme} from "../tool/themeChange.js";
 import {useGoToChat, useGoToHome, useGoToUser} from "../router/goToRouter.js";
+import {globalState} from "../global/globalState.js";
 
 const goToHome = useGoToHome();
 const goToChat = useGoToChat();
 const goToUser = useGoToUser();
 
-const activeIndex = ref('1')
 const handleSelect = (key, keyPath) => {
     switch (key) {
         case '0':
@@ -19,8 +19,6 @@ const handleSelect = (key, keyPath) => {
         case '2':
             goToUser()
             break
-        case '3':
-            break
         default:
             break
     }
@@ -31,7 +29,7 @@ const handleSelect = (key, keyPath) => {
 
 <template>
     <el-menu
-            :default-active="activeIndex"
+            :default-active="globalState.activeIndex"
             class="el-menu-demo"
             mode="horizontal"
             :ellipsis="false"

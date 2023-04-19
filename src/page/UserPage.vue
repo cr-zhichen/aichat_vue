@@ -1,5 +1,7 @@
 <script setup>
+import {globalState} from "../global/globalState.js";
 
+globalState.activeIndex = '2';
 </script>
 
 

@@ -7,6 +7,10 @@ import {ref} from "vue";
 const route = useRoute()
 const id = ref(route.params.id)
 
+import {globalState} from "../global/globalState.js";
+
+globalState.activeIndex = '1';
+
 </script>
 
 
