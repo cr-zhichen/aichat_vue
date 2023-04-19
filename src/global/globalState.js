@@ -1,6 +1,10 @@
 // globalState.js
-import { reactive } from '@vue/reactivity';
+import {reactive} from '@vue/reactivity';
 
 export const globalState = reactive({
-    globalVar: '这是一个全局变量',
+    // currentTheme: () => {
+    //     //从localStorage中获取主题
+    //     let theme = localStorage.getItem('vueuse-color-scheme');
+    //     return theme ? theme : 'auto';
+    // }
 });

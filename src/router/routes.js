@@ -6,6 +6,12 @@ const routes = [
         component: () => import('@/page/IndexPage.vue'), //.vue不能省略
     },
     {
+        path: '/chat/:id',
+        name: 'chat',
+        title: '聊天',
+        component: () => import('@/page/ChatPage.vue'),
+    },
+    {
         path: '/chat',
         name: 'chat',
         title: '聊天',
