@@ -36,3 +36,21 @@ export function useGoToUser() {
         router.push("/user");
     };
 }
+
+//跳转到登录界面
+export function useGoToLogin() {
+    const router = useRouter();
+
+    return function () {
+        router.push("/login");
+    };
+}
+
+//跳转到注册界面
+export function useGoToRegister() {
+    const router = useRouter();
+
+    return function () {
+        router.push("/register");
+    };
+}

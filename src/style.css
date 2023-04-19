@@ -4,8 +4,6 @@
     font-weight: 400;
 
     color-scheme: light dark;
-    /*color: rgba(255, 255, 255, 0.87);*/
-    /*background-color: #242424;*/
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -34,13 +32,6 @@ a:hover {
     color: #535bf2;
 }
 
-/*body {*/
-/*  margin: 0;*/
-/*  display: flex;*/
-/*  place-items: center;*/
-/*  min-width: 320px;*/
-/*  min-height: 100vh;*/
-/*}*/
 
 h1 {
     font-size: 3.2em;
@@ -72,10 +63,59 @@ button:focus-visible {
     padding: 2em;
 }
 
-/*#app {*/
-/*  max-width: 1280px;*/
-/*  margin: 0 auto;*/
-/*  padding: 2rem;*/
-/*  text-align: center;*/
-/*}*/
+#homePage,
+#loginPage,
+#registerPage {
 
+    margin: 10% 10%;
+
+    /*    内部文字居中*/
+    text-align: center;
+    min-width: 60%;
+
+}
+
+#registerPage {
+    margin: 5% 10%;
+}
+
+#homePage .box-card,
+#loginPage .box-card,
+#registerPage .box-card {
+    margin: 0 auto;
+    padding: 100px 10px;
+}
+
+#loginPage .box-card,
+#registerPage .box-card {
+    padding: 40px 80px;
+}
+
+
+/*适配手机宽度*/
+@media screen and (max-width: 920px) {
+    #homePage,
+    #loginPage,
+    #registerPage {
+        margin: 1% 1%;
+    }
+
+    #loginPage .box-card,
+    #registerPage .box-card {
+        padding: 20px 20px;
+    }
+}
+
+/* 适配较低屏幕高度 */
+@media screen and (max-height: 600px) {
+    #homePage,
+    #loginPage,
+    #registerPage {
+        margin: 1% 1%;
+    }
+
+    #loginPage .box-card,
+    #registerPage .box-card {
+        padding: 20px 20px;
+    }
+}
