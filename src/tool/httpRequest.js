@@ -269,57 +269,69 @@ export async function findAllChatRecordTask(token, start, ok, err, end) {
     );
 }
 
-//ws聊天方法
-export async function wsChatTask(token, request, start, ok, err, tokenErr, end) {
+let ws; // 在外部声明 WebSocket 实例
+
+// ws 聊天方法
+export async function wsChatTask(request, start, ok, err, tokenErr, close, end) {
     start && start();
     await wsHandler(
         config.WsUrl + config.WS,
         request,
-        data => {
+        (data) => {
             if (data.length !== 0) {
                 const chatTakeResponse = JSON.parse(data);
 
                 switch (chatTakeResponse.route) {
-                    case 'chat':
-                        if (chatTakeResponse.content === '[DONE]') {
+                    case "chat":
+                        if (chatTakeResponse.content === "[DONE]") {
                             end && end(chatTakeResponse);
                         } else {
                             ok && ok(chatTakeResponse);
                         }
                         break;
-                    case 'tokenErr':
-                        tokenErr && tokenErr(chatTakeResponse.content || 'Token错误');
+                    case "tokenErr":
+                        tokenErr && tokenErr(chatTakeResponse.content);
                         break;
-                    case 'err':
-                        err && err(chatTakeResponse.content || '其他错误，请重试');
+                    case "err":
+                        err && err(chatTakeResponse.content);
                         break;
                 }
             } else {
-                err && err('服务器连接断开');
+                err && err("服务器连接断开");
             }
         },
         err,
-        token
+        close
     );
 }
 
-export async function wsHandler(url, data, ok, err, token) {
-    const ws = new WebSocket(url, {headers: {Authorization: 'Bearer ' + token}});
+export async function wsHandler(url, data, ok, err, close) {
+    if (!ws || ws.readyState === WebSocket.CLOSED) {
+        ws = new WebSocket(url); // 只在需要时初始化 WebSocket 实例
 
-    ws.on('open', () => {
+        ws.addEventListener("open", (event) => {
+            ws.send(JSON.stringify(data));
+        });
+
+        ws.addEventListener("message", (event) => {
+            ok && ok(event.data);
+        });
+
+        ws.addEventListener("error", (event) => {
+            err && err(event);
+            ws.close();
+        });
+
+        ws.addEventListener("close", (event) => {
+            close && close("服务器连接断开");
+            ws.close();
+        });
+    } else {
+        // 如果已经连接，直接发送数据
         ws.send(JSON.stringify(data));
-    });
+    }
 
-    ws.on('message', message => {
-        ok && ok(message);
-    });
-
-    ws.on('error', error => {
-        err && err(error.message);
-    });
-
-    ws.on('close', () => {
-        // Connection closed
+    return new Promise((resolve, reject) => {
     });
 }
 

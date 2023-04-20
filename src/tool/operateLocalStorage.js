@@ -45,6 +45,18 @@ export function getHistoryList() {
     }
 }
 
+//向历史记录列表中添加一条记录
+export function addHistoryList(history) {
+    let historyList = localStorage.getItem("historyList");
+    if (!historyList) {
+        historyList = [];
+    } else {
+        historyList = JSON.parse(historyList);
+    }
+    historyList.push(history);
+    localStorage.setItem("historyList", JSON.stringify(historyList));
+}
+
 //判断历史记录列表是否为空
 export function isHistoryListEmpty() {
     let historyList = localStorage.getItem("historyList");
@@ -63,8 +75,6 @@ export function setHistoryDetail(id, historyDetail) {
     } else {
         historyDetailMap = JSON.parse(historyDetailMap);
     }
-
-    console.log(historyDetail);
 
     // 修改了这里
     historyDetailMap[id] = historyDetail;

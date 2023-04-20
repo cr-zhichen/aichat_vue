@@ -2,7 +2,7 @@
 
 //接收路由参数
 import {useRoute} from "vue-router";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {Delete, Promotion} from '@element-plus/icons-vue'
 
 const route = useRoute()
@@ -10,6 +10,8 @@ const id = ref(route.params.id)
 
 import {globalState} from "../global/globalState.js";
 import {
+    addHistoryList,
+    clearAll,
     clearHistory,
     deleteHistoryDetail, getHistoryDetail,
     getHistoryList,
@@ -21,15 +23,17 @@ import {
     deleteAllChatRecordTask,
     deleteChatRecordTask,
     findAllChatRecordTask, getChatRecordTask,
-    touristsTask
+    touristsTask, wsChatTask
 } from "../tool/httpRequest.js";
 import {ElLoading, ElNotification} from "element-plus";
-import {useGoToChat, useGoToChatWithId} from "../router/goToRouter.js";
+import {useGoToChat, useGoToChatWithId, useGoToHome} from "../router/goToRouter.js";
 
 globalState.activeIndex = '1';
 
 const loading = ref(null);
 const goToChat = useGoToChat();
+const goToUser = useGoToChat();
+const goToHome = useGoToHome();
 
 const goToChatWithId = useGoToChatWithId();
 
@@ -38,6 +42,9 @@ const dialogTableVisible = ref(false);
 const historyList = ref([]);
 const historyDetail = ref([]);
 
+const questionInputDisabled = ref(false);
+
+const role = ref("");
 
 //vue加载完后执行
 onMounted(() => {
@@ -57,6 +64,9 @@ onMounted(() => {
     if (id.value !== '') {
         getChatRecord(id.value);
     }
+
+    role.value = getRole();
+
 })
 
 //游客登录方法
@@ -76,6 +86,7 @@ const touristsLogin = () => {
                 type: 'success',
             })
             globalState.showLogin = true;
+            role.value = '0';
         },
         (o) => {
             ElNotification({
@@ -93,9 +104,11 @@ const touristsLogin = () => {
 //请求历史列表方法
 const findAllChatRecord = () => {
 
+    newChat();
+
     //清除本地历史记录
     clearHistory();
-    historyList.value = getHistoryList();
+    historyList.value = [];
 
     //请求全部历史记录
     findAllChatRecordTask(
@@ -151,6 +164,7 @@ const getChatRecord = (o) => {
                     message: p,
                     type: 'error',
                 })
+                newChat();
             },
             () => {
                 loading.value.close();
@@ -176,7 +190,8 @@ const delAllChatRecord = () => {
                 title: '删除全部历史记录成功',
                 type: 'success',
             })
-            historyList.value = getHistoryList();
+            historyList.value = [];
+            newChat();
         },
         (o) => {
             ElNotification({
@@ -214,6 +229,9 @@ const deleteChatRecord = (o) => {
                 type: 'success',
             })
             deleteHistoryDetail(o);
+            if (id.value == o) {
+                newChat();
+            }
             historyList.value = getHistoryList();
         },
         (o) => {
@@ -231,13 +249,16 @@ const deleteChatRecord = (o) => {
 
 //显示历史记录
 const showRecords = (row) => {
-    console.log(row);
     goToChatWithId(row.id);
     getChatRecord(row.id);
     dialogTableVisible.value = false;
+    id.value = row.id;
 }
 
 const questionInput = ref("");
+const isFirst = ref(true);
+
+//发送消息
 const sendMsg = () => {
     if (questionInput.value === "") {
         ElNotification({
@@ -246,8 +267,127 @@ const sendMsg = () => {
         })
         return;
     }
+
+    if (questionInputDisabled.value) {
+        ElNotification({
+            title: '请等待服务器响应',
+            type: 'error',
+        })
+        return;
+    }
+
+    //这里写发送消息的方法
+    historyDetail.value.push({
+        role: "user",
+        content: questionInput.value,
+    })
+
+    wsChatTask(
+        {
+            data: {
+                messages: questionInput.value,
+                chatHistory: id.value == '' ? null : id.value
+            },
+            token: getToken()
+        },
+        () => {
+            questionInputDisabled.value = true;
+            historyDetail.value.push({
+                role: "assistant",
+                content: "等待服务器响应，请稍后...",
+            })
+            isFirst.value = true;
+        },
+        (o) => {
+            if (isFirst.value) {
+                isFirst.value = false;
+                historyDetail.value[historyDetail.value.length - 1].content = o.content;
+                return;
+            }
+            //获取historyDetail.value最后一条数据并修改
+            historyDetail.value[historyDetail.value.length - 1].content += o.content;
+        },
+        (o) => {
+            questionInputDisabled.value = false;
+            ElNotification({
+                title: '发送消息失败',
+                message: o,
+                type: 'error',
+            })
+            //删除最后一条数据
+            historyDetail.value.pop();
+        },
+        (o) => {
+            questionInputDisabled.value = false;
+            ElNotification({
+                title: '登录过期',
+                message: o,
+                type: 'error',
+            })
+            clearAll();
+            goToHome();
+        },
+        (o) => {
+            questionInputDisabled.value = false;
+            ElNotification({
+                title: o,
+                type: 'error',
+            })
+            //删除最后一条数据
+            historyDetail.value.pop();
+        },
+        (o) => {
+            questionInputDisabled.value = false;
+            goToChatWithId(o.historyId);
+            id.value = o.historyId;
+
+            if (role == '0') {
+                return;
+            }
+
+            let preview = historyDetail.value[historyDetail.value.length - 2].content;
+            //取前10个字符
+            if (preview.length > 10) {
+                preview = preview.substring(0, 10);
+            }
+
+            //判断historyList中是否存在该id 若不存在则添加
+            for (let i = 0; i < historyList.value?.length; i++) {
+                if (historyList.value[i].id === o.historyId) {
+                    return;
+                }
+            }
+
+            addHistoryList({
+                id: o.historyId,
+                preview: preview
+            });
+
+            historyList.value = getHistoryList();
+        }
+    )
+
     questionInput.value = "";
 }
+
+const newChat = () => {
+    goToChat();
+    historyDetail.value = [];
+    id.value = '';
+}
+
+const historyDetailIsEmpty = () => {
+    if (historyDetail.value === null || historyDetail.value == '') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//计算属性
+const sortedHistoryList = computed(() => {
+    return historyList.value.slice().sort((a, b) => b.id - a.id);
+})
 
 </script>
 
@@ -255,7 +395,7 @@ const sendMsg = () => {
 <template>
     <el-dialog v-model="dialogTableVisible" title="历史记录" id="chatPage-table">
         <el-table
-                :data="historyList"
+                :data="sortedHistoryList"
                 height="450"
                 @cell-click="showRecords">
 
@@ -287,33 +427,41 @@ const sendMsg = () => {
 
     <div id="chatPage">
 
-
         <el-affix target="#chatPage" :offset="80">
             <el-alert title="游客用户每日限制10条消息，无法使用历史记录联想功能，限制回复字数" type="warning" center
-                      :closable="true" v-if="getRole()==='0'"/>
+                      :closable="true" v-if="role==='0'"/>
 
             <el-alert title="普通用户每日免费10条消息，每24小时重置提问次数，购买会员可增加次数" type="warning" center
-                      :closable="true" v-if="getRole()==='1'"/>
+                      :closable="true" v-if="role==='1'"/>
         </el-affix>
 
-        <el-alert title="在下方输入框输入内容，使用回车键发送消息" type="info" center :closable="false"/>
+        <el-alert
+                title="在下方输入框输入内容，使用回车键发送消息"
+                type="info"
+                center :closable="false"
+                v-if="historyDetailIsEmpty()"
+        />
 
+        <div v-for="(val, key, index) in historyDetail">
+            <el-card
+                    shadow="hover"
+                    class="box-card box-card-user"
+                    v-if="val.role=='user'">
+                <span>{{ val.content }}</span>
+            </el-card>
 
-        <el-card shadow="hover" class="box-card box-card-user">
-            <span>问题测试</span>
-        </el-card>
-
-        <el-card shadow="hover" class="box-card box-card-rebot">
-            <span>回答测试</span>
-        </el-card>
+            <el-card shadow="hover" class="box-card box-card-rebot" v-if="val.role=='assistant'">
+                <span>{{ val.content }}</span>
+            </el-card>
+        </div>
 
     </div>
 
 
     <div class="chatPage-affix-01">
         <div class="chatPage-affix-btns">
-            <el-button type="primary" plain @click="goToChat()">新建会话</el-button>
-            <el-button type="info" plain @click="dialogTableVisible=true">查看历史记录</el-button>
+            <el-button type="primary" plain @click="newChat();">新建会话</el-button>
+            <el-button type="info" plain @click="dialogTableVisible=true" v-if="role!=0">查看历史记录</el-button>
         </div>
     </div>
 
@@ -340,19 +488,24 @@ const sendMsg = () => {
 }
 
 .box-card-user {
-    /*    边框颜色*/
-    /*border-color: rgba(60, 144, 231, 0.53);*/
+    /*    背景颜色*/
+    background-color: rgba(177, 180, 183, 0.05);
+    /*    右侧对齐*/
+    text-align: right;
 }
 
 .box-card-rebot {
-    /*    边框颜色*/
-    border-color: rgba(22, 82, 145, 0.53);
+    /*    背景颜色*/
+    background-color: rgba(177, 180, 183, 0.1);
 }
 
 .box-card {
     margin-top: 10px;
     /*    宽度根据内容调整*/
     width: auto;
+
+    /*    删除边框*/
+    border: none;
 }
 
 .chatPage-affix-02 {
