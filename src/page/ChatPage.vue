@@ -519,8 +519,9 @@ const copyToClipboard = (copyToClipboard) => {
                 class="chatPage-affix-input"
                 size="large"
                 placeholder="请输入你的问题"
-                :suffix-icon="Promotion"
-                @keyup.enter.native="sendMsg"
+                :suffix-icon="questionInputDisabled?'Loading':'Promotion'"
+                @keyup.enter.native=" sendMsg
+        "
         />
     </div>
 
