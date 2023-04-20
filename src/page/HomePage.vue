@@ -2,6 +2,7 @@
 import {globalState} from "../global/globalState.js";
 import {useGoToChat, useGoToUser} from "../router/goToRouter.js";
 import {getRole, getToken} from "../tool/operateLocalStorage.js";
+import "../css/box-card.css"
 
 globalState.activeIndex = "0";
 
@@ -12,7 +13,9 @@ const goToUser = useGoToUser();
 
 <template>
     <div id="homePage">
-        <el-card class="box-card">
+        <el-card
+                shadow="hover"
+                class="box-card">
             <h2>欢迎使用AI Chat</h2>
             <p>
                 本网站，接入ChatGPT API，可以快速体验ChatGPT

@@ -34,6 +34,7 @@ import {marked} from 'marked';
 // 引入代码高亮样式
 // import 'highlight.js/styles/atom-one-dark.css'
 import '../css/codeHighlight.css'
+import "../css/box-card.css"
 
 globalState.activeIndex = '1';
 
@@ -466,20 +467,21 @@ const copyToClipboard = (copyToClipboard) => {
 
     <div id="chatPage">
 
-        <el-affix target="#chatPage" :offset="80">
-            <el-alert title="游客用户每日限制10条消息，无法使用历史记录联想功能，限制回复字数" type="warning" center
-                      :closable="true" v-if="role==='0'"/>
-
-            <el-alert title="普通用户每日免费10条消息，每24小时重置提问次数，购买会员可增加次数" type="warning" center
-                      :closable="true" v-if="role==='1'"/>
-        </el-affix>
-
         <el-alert
                 title="在下方输入框输入内容，使用回车键发送消息"
                 type="info"
                 center :closable="false"
                 v-if="historyDetailIsEmpty()"
+                style="margin-top: 10px"
         />
+
+        <el-affix target="#chatPage" :offset="80">
+            <el-alert title="游客用户每日限制10条消息，无法使用历史记录联想功能，限制回复字数" type="warning" center
+                      :closable="true" v-if="role==='0'" style="margin-top: 10px;"/>
+
+            <el-alert title="普通用户每日免费10条消息，每24小时重置提问次数，购买会员可增加次数" type="warning" center
+                      :closable="true" v-if="role==='1'" style="margin-top: 10px"/>
+        </el-affix>
 
         <div v-for="(val, key, index) in historyDetail">
             <el-card
@@ -547,30 +549,7 @@ const copyToClipboard = (copyToClipboard) => {
 }
 
 .box-card {
-    background-color: rgba(255, 255, 255, 0.5);
-
     margin-top: 10px;
-    /*    宽度根据内容调整*/
-    width: auto;
-
-    /*    圆角*/
-    border-radius: 10px;
-
-    /*    边框 深灰色*/
-    border: 1px solid #60626622;
-
-    /*    文字颜色 深灰色 */
-    color: #606266;
-}
-
-.dark .box-card {
-    background-color: rgba(129, 129, 129, 0.05);
-
-    /*    边框浅灰色*/
-    border: 1px solid #e4e4e422;
-
-    /*    文字颜色 浅灰色*/
-    color: #bcc0c7;
 }
 
 .chatPage-affix-02 {

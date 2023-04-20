@@ -4,6 +4,7 @@ import {reactive, ref} from "@vue/reactivity";
 import {useGoToChat, useGoToRegister} from "../router/goToRouter.js";
 import {loginTask} from "../tool/httpRequest.js";
 import {ElLoading, ElNotification} from "element-plus";
+import "../css/box-card.css"
 
 if (globalState.showLogin === true) {
     globalState.activeIndex = '3';
@@ -87,7 +88,8 @@ const goToRegister = useGoToRegister();
 
 <template>
     <div id="loginPage">
-        <el-card class="box-card">
+        <el-card shadow="hover"
+                 class="box-card">
             <h2>登录</h2>
             <el-form
                     :model="loginForm"

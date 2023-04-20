@@ -34,7 +34,7 @@ import Menu from "./components/Menu.vue";
 
 /*夜间模式*/
 .dark .background {
-    background-image: radial-gradient(circle, rgba(58, 58, 58, 0.40) 2px, transparent 0);
+    background-image: radial-gradient(circle, rgba(58, 58, 58, 0.20) 2px, transparent 0);
 }
 
 #app-menu {

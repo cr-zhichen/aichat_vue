@@ -6,6 +6,7 @@ import {getUserInfoTask, useCodeTask} from "../tool/httpRequest.js";
 import {onMounted} from "vue";
 import {ElLoading, ElNotification} from "element-plus";
 import {ref} from "@vue/reactivity";
+import "../css/box-card.css"
 
 globalState.activeIndex = '2';
 
@@ -149,7 +150,9 @@ const exitLogin = ref(() => {
 
 <template>
     <div id="userPage">
-        <el-card class="box-card">
+        <el-card
+            shadow="hover"
+            class="box-card">
             <h2>个人中心</h2>
             <p>用户名：{{ userInfo.userName }}</p>
             <p>邮箱：{{ userInfo.email }}</p>
@@ -165,7 +168,9 @@ const exitLogin = ref(() => {
             </el-button>
         </el-card>
 
-        <el-card class="box-card">
+        <el-card
+            shadow="hover"
+            class="box-card">
             <h2>账户激活</h2>
             <div v-if="getRole() !== '0'">
                 <p>如需增加请求次数，请购买激活码并激活</p>

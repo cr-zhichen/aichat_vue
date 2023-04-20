@@ -4,6 +4,7 @@ import {reactive, ref} from "@vue/reactivity";
 import {useGoToChat, useGoToLogin} from "../router/goToRouter.js";
 import {ElLoading, ElNotification} from "element-plus";
 import {registerTask, resetTask, sendCodeTask} from "../tool/httpRequest.js";
+import "../css/box-card.css"
 
 if (globalState.showLogin === true) {
     globalState.activeIndex = '3';
@@ -191,7 +192,8 @@ const snedCodeLoading = ref(false);
 
 <template>
     <div id="registerPage">
-        <el-card class="box-card">
+        <el-card shadow="hover"
+                 class="box-card">
             <h2>注册 / 忘记密码</h2>
             <el-form
                     :model="loginForm"

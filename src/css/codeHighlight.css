@@ -11,9 +11,9 @@ code.hljs {
 
 .hljs {
     color: #333;
-    background: #f8f8f8;
+    background: #f8f8f855;
     /*    圆角*/
-    border-radius: 5px;
+    border-radius: 10px;
     /*    边框*/
     border: 1px solid #eaecef;
 
@@ -38,7 +38,7 @@ code.hljs {
 
 .dark .hljs {
     color: #abb2bf;
-    background: #282c34;
+    background: #282c3488;
     /*    边框*/
     border: 1px solid #3e4451;
 }
