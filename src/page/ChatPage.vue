@@ -537,24 +537,40 @@ const copyToClipboard = (copyToClipboard) => {
 }
 
 .box-card-user {
-    /*    背景颜色*/
-    background-color: rgba(177, 180, 183, 0.05);
     /*    右侧对齐*/
-    text-align: right;
+    /*text-align: right;*/
 }
 
 .box-card-rebot {
-    /*    背景颜色*/
-    background-color: rgba(177, 180, 183, 0.05);
+    /*    左侧对齐*/
+    /*text-align: left;*/
 }
 
 .box-card {
+    background-color: rgba(255, 255, 255, 0.5);
+
     margin-top: 10px;
     /*    宽度根据内容调整*/
     width: auto;
 
-    /*    删除边框*/
-    border: none;
+    /*    圆角*/
+    border-radius: 10px;
+
+    /*    边框 深灰色*/
+    border: 1px solid #60626622;
+
+    /*    文字颜色 深灰色 */
+    color: #606266;
+}
+
+.dark .box-card {
+    background-color: rgba(129, 129, 129, 0.05);
+
+    /*    边框浅灰色*/
+    border: 1px solid #e4e4e422;
+
+    /*    文字颜色 浅灰色*/
+    color: #bcc0c7;
 }
 
 .chatPage-affix-02 {

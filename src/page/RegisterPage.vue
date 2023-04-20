@@ -50,8 +50,8 @@ const loginRules = reactive(
             {required: true, message: '请输入密码', trigger: 'blur'},
             {min: 8, max: 16, message: '长度在 8 到 16 个字符', trigger: 'blur'},
             {
-                pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/,
-                message: '密码必须包含数字和字母',
+                pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*()_+-=\[\]{};':"\\|,.<>\/?]*$/,
+                message: '密码必须包含数字和字母，可以包含特殊字符',
                 trigger: 'blur'
             }
         ]
