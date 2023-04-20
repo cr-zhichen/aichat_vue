@@ -1,6 +1,6 @@
 //axios
 import axios from 'axios';
-import {setRole, setToken} from "./operateLocalStorage.js";
+import {setHistoryDetail, setHistoryList, setRole, setToken} from "./operateLocalStorage.js";
 
 const config =
     {
@@ -187,6 +187,7 @@ export async function getChatRecordTask(token, request, start, ok, err, end) {
         request,
         data => {
             if (data.code === 0) {
+                setHistoryDetail(request.id, data.data);
                 ok && ok(data.data);
             } else {
                 err && err(data.msg);
@@ -253,6 +254,7 @@ export async function findAllChatRecordTask(token, start, ok, err, end) {
         '',
         data => {
             if (data.code === 0) {
+                setHistoryList(data.data);
                 ok && ok(data.data);
             } else {
                 err && err(data.msg);

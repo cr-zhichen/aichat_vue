@@ -41,11 +41,11 @@ const start = () => {
             });
         },
         (o) => {
-            ElNotification({
-                title: '获取用户信息成功',
-                message: '',
-                type: 'success'
-            });
+            // ElNotification({
+            //     title: '获取用户信息成功',
+            //     message: '',
+            //     type: 'success'
+            // });
             let role = '';
             if (o.grade === -1) {
                 role = '管理员';

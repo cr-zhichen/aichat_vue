@@ -20,13 +20,14 @@ export function useGoToChat() {
 }
 
 //跳转到有id的聊天界面
-export function useGoToChatWithId(id) {
+export function useGoToChatWithId() {
     const router = useRouter();
 
-    return function () {
+    return function (id) {
         router.push(`/chat/${id}`);
     };
 }
+
 
 //跳转到用户界面
 export function useGoToUser() {

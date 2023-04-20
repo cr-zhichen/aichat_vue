@@ -65,7 +65,8 @@ button:focus-visible {
 
 #homePage,
 #loginPage,
-#registerPage {
+#registerPage,
+#userPage {
 
     margin: 10% 10%;
 
@@ -82,6 +83,7 @@ button:focus-visible {
 #chatPage {
     margin: 80px 10% 150px 10%;
 }
+
 
 #homePage .box-card,
 #loginPage .box-card,
@@ -136,5 +138,11 @@ button:focus-visible {
 
     .chatPage-affix-btns {
         margin: 0px 3% 0px 3%;
+    }
+
+    #chatPage-table {
+        /*    铺满全屏*/
+        width: 95%;
+
     }
 }
