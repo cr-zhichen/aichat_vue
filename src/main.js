@@ -12,12 +12,31 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
+import hljs from 'highlight.js';
+
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
 app.use(router)
+app.use(hljs)
+
+app.directive('highlight', (el) => {
+    let blocks = el.querySelectorAll('pre code')
+    blocks.forEach((block) => {
+
+        // 创建ol标签元素
+        let ol = document.createElement("ol");
+
+        // 为ol标签添加class名
+        ol.className = 'pre-numbering';
+        block.parentNode.appendChild(ol);
+
+        hljs.highlightBlock(block)
+    })
+})
+
 app.mount('#app')
 
 

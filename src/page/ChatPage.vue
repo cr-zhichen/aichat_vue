@@ -29,6 +29,12 @@ import {ElLoading, ElMessage, ElNotification} from "element-plus";
 import {useGoToChat, useGoToChatWithId, useGoToHome} from "../router/goToRouter.js";
 import {scrollToBottom} from "../tool/scrollToBottom.js";
 
+// 将marked 引入
+import {marked} from 'marked';
+// 引入代码高亮样式
+// import 'highlight.js/styles/atom-one-dark.css'
+import '../css/codeHighlight.css'
+
 globalState.activeIndex = '1';
 
 const loading = ref(null);
@@ -397,16 +403,25 @@ const sortedHistoryList = computed(() => {
 })
 
 const copyToClipboard = (copyToClipboard) => {
+
+    let isCopySelected = false;
+
+    //如果用户选中了文本，则复制选中内容
+    if (window.getSelection().toString() !== '') {
+        copyToClipboard = window.getSelection().toString();
+        isCopySelected = true;
+    }
+
     navigator.clipboard.writeText(copyToClipboard).then(
         () => {
             ElMessage({
-                message: '复制成功',
+                message: isCopySelected ? '复制选中内容成功' : '复制成功',
                 type: 'success',
             })
         },
         (err) => {
             ElMessage({
-                message: '复制失败',
+                message: isCopySelected ? '复制选中内容失败' : '复制失败',
                 type: 'error',
             })
         }
@@ -472,7 +487,9 @@ const copyToClipboard = (copyToClipboard) => {
                     class="box-card box-card-user"
                     v-if="val.role=='user'"
                     @click="copyToClipboard(val.content)">
-                <span>{{ val.content }}</span>
+
+                <div v-highlight v-html="marked(val.content)" class="markdown-body"></div>
+
             </el-card>
 
             <el-card
@@ -480,7 +497,9 @@ const copyToClipboard = (copyToClipboard) => {
                     class="box-card box-card-rebot"
                     v-if="val.role=='assistant'"
                     @click="copyToClipboard(val.content)">
-                <span>{{ val.content }}</span>
+
+                <div v-highlight v-html="marked(val.content)" class="markdown-body"></div>
+
             </el-card>
         </div>
 
@@ -525,7 +544,7 @@ const copyToClipboard = (copyToClipboard) => {
 
 .box-card-rebot {
     /*    背景颜色*/
-    background-color: rgba(177, 180, 183, 0.1);
+    background-color: rgba(177, 180, 183, 0.05);
 }
 
 .box-card {
