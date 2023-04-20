@@ -14,7 +14,7 @@ export function useGoToHome() {
 export function useGoToChat() {
     const router = useRouter();
 
-    return function (ok) {
+    return function () {
         router.push(`/chat`);
     };
 }

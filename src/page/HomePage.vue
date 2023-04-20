@@ -1,6 +1,7 @@
 <script setup>
 import {globalState} from "../global/globalState.js";
 import {useGoToChat, useGoToUser} from "../router/goToRouter.js";
+import {getRole, getToken} from "../tool/operateLocalStorage.js";
 
 globalState.activeIndex = "0";
 
@@ -19,8 +20,15 @@ const goToUser = useGoToUser();
             <p>
                 点击下方按钮，即可快速体验ChatGPT
             </p>
-            <el-button type="primary" plain size="large" @click="goToChat">快速体验</el-button>
-            <el-button type="success" plain size="large" @click="goToUser">登录/注册</el-button>
+            <br>
+            <div v-if="getToken()==null">
+                <el-button type="primary" plain size="large" @click="goToChat">快速体验</el-button>
+                <el-button type="success" plain size="large" @click="goToUser">登录/注册</el-button>
+            </div>
+            <div v-else>
+                <el-button type="primary" plain size="large" @click="goToChat">进入聊天</el-button>
+                <el-button type="success" plain size="large" @click="goToUser">个人中心</el-button>
+            </div>
         </el-card>
 
     </div>

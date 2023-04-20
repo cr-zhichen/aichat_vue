@@ -346,7 +346,7 @@ const sendMsg = () => {
             goToChatWithId(o.historyId);
             id.value = o.historyId;
 
-            if (role == '0') {
+            if (role.value == '0') {
                 return;
             }
 

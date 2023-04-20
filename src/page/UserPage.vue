@@ -181,6 +181,7 @@ const exitLogin = ref(() => {
             <div v-else>
                 <p>游客用户需先登录或注册</p>
                 <el-button type="primary" @click="goToLogin" plain>登录</el-button>
+                <el-button type="warning" @click="goToRegister" plain>注册</el-button>
             </div>
         </el-card>
     </div>
@@ -191,6 +192,7 @@ const exitLogin = ref(() => {
 
 .box-card {
     margin-bottom: 20px;
+    padding-bottom: 30px;
 }
 
 .userPage-card2-input {

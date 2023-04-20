@@ -63,6 +63,7 @@ const login = ref(async (formEl) => {
                     })
                     globalState.showLogin = false;
                     goToChat();
+
                 },
                 (o) => {
                     ElNotification({
