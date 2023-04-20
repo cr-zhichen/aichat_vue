@@ -323,7 +323,7 @@ export async function wsHandler(url, data, ok, err, close) {
         });
 
         ws.addEventListener("close", (event) => {
-            close && close("服务器连接断开");
+            close && close("服务器连接关闭");
             ws.close();
         });
     } else {
@@ -335,6 +335,12 @@ export async function wsHandler(url, data, ok, err, close) {
     });
 }
 
+//关闭ws
+export async function wsCloseTask() {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.close();
+    }
+}
 
 export async function httpHelp(url, data, ok, err, token = '') {
     try {
@@ -354,4 +360,3 @@ export async function httpHelp(url, data, ok, err, token = '') {
         err && err(error.message);
     }
 }
-

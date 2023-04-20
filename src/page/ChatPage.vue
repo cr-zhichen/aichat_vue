@@ -23,10 +23,11 @@ import {
     deleteAllChatRecordTask,
     deleteChatRecordTask,
     findAllChatRecordTask, getChatRecordTask,
-    touristsTask, wsChatTask
+    touristsTask, wsChatTask, wsCloseTask
 } from "../tool/httpRequest.js";
 import {ElLoading, ElNotification} from "element-plus";
 import {useGoToChat, useGoToChatWithId, useGoToHome} from "../router/goToRouter.js";
+import {scrollToBottom} from "../tool/scrollToBottom.js";
 
 globalState.activeIndex = '1';
 
@@ -306,6 +307,10 @@ const sendMsg = () => {
             }
             //获取historyDetail.value最后一条数据并修改
             historyDetail.value[historyDetail.value.length - 1].content += o.content;
+
+            //将页面滚动到最底部
+            setTimeout(scrollToBottom, 100);
+
         },
         (o) => {
             questionInputDisabled.value = false;
@@ -374,6 +379,8 @@ const newChat = () => {
     goToChat();
     historyDetail.value = [];
     id.value = '';
+    questionInputDisabled.value = false;
+    wsCloseTask();
 }
 
 const historyDetailIsEmpty = () => {
