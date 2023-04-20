@@ -3,7 +3,7 @@
 //接收路由参数
 import {useRoute} from "vue-router";
 import {computed, onMounted, ref} from "vue";
-import {Delete, Promotion} from '@element-plus/icons-vue'
+import {Delete, Loading, Promotion, Search} from '@element-plus/icons-vue'
 
 const route = useRoute()
 const id = ref(route.params.id)
@@ -266,6 +266,15 @@ const showRecords = (row) => {
 const questionInput = ref("");
 const isFirst = ref(true);
 
+const clickEnter = (event) => {
+    if (event.shiftKey) {
+        // 如果按下Shift+回车，则添加换行符
+        event.preventDefault();
+        return;
+    }
+    sendMsg();
+}
+
 //发送消息
 const sendMsg = () => {
     if (questionInput.value === "") {
@@ -305,6 +314,8 @@ const sendMsg = () => {
                 content: "等待服务器响应，请稍后...",
             })
             isFirst.value = true;
+            //将页面滚动到最底部
+            setTimeout(scrollToBottom, 100);
         },
         (o) => {
             if (isFirst.value) {
@@ -521,10 +532,24 @@ const copyToClipboard = (copyToClipboard) => {
                 class="chatPage-affix-input"
                 size="large"
                 placeholder="请输入你的问题"
-                :suffix-icon="questionInputDisabled?'Loading':'Promotion'"
-                @keyup.enter.native=" sendMsg
-        "
-        />
+                @keyup.enter.native="clickEnter"
+        >
+
+            <template #append>
+                <el-button v-if="questionInputDisabled" @click="sendMsg()">
+                    <el-icon class="is-loading" style="width: 25px">
+                        <Loading/>
+                    </el-icon>
+                </el-button>
+
+                <el-button v-else @click="sendMsg()">
+                    <el-icon style="width: 25px">
+                        <Promotion/>
+                    </el-icon>
+                </el-button>
+
+            </template>
+        </el-input>
     </div>
 
 
@@ -565,7 +590,7 @@ const copyToClipboard = (copyToClipboard) => {
 
 .chatPage-affix-01 {
     position: fixed;
-    bottom: 110px;
+    bottom: 100px;
     right: 0;
     width: 100%;
     /*    内部元素居中*/

@@ -1,5 +1,4 @@
 export function scrollToBottom() {
-    console.log('scrollToBottom');
     (function smoothscroll() {
         const currentScroll = document.documentElement.scrollTop || document.body.scrollTop; // 已经被卷掉的高度
         const clientHeight = document.documentElement.clientHeight; // 浏览器高度

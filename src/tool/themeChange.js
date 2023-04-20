@@ -18,11 +18,11 @@ export function getThemeName() {
     let theme = getTheme();
     switch (theme) {
         case Theme.LIGHT:
-            return '浅色模式';
+            return '浅色主题';
         case Theme.DARK:
-            return '暗黑模式';
+            return '深色主题';
         case Theme.AUTO:
-            return '跟随系统';
+            return '自动主题';
         default:
     }
 }
