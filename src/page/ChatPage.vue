@@ -25,7 +25,7 @@ import {
     findAllChatRecordTask, getChatRecordTask,
     touristsTask, wsChatTask, wsCloseTask
 } from "../tool/httpRequest.js";
-import {ElLoading, ElNotification} from "element-plus";
+import {ElLoading, ElMessage, ElNotification} from "element-plus";
 import {useGoToChat, useGoToChatWithId, useGoToHome} from "../router/goToRouter.js";
 import {scrollToBottom} from "../tool/scrollToBottom.js";
 
@@ -396,6 +396,23 @@ const sortedHistoryList = computed(() => {
     return historyList.value.slice().sort((a, b) => b.id - a.id);
 })
 
+const copyToClipboard = (copyToClipboard) => {
+    navigator.clipboard.writeText(copyToClipboard).then(
+        () => {
+            ElMessage({
+                message: '复制成功',
+                type: 'success',
+            })
+        },
+        (err) => {
+            ElMessage({
+                message: '复制失败',
+                type: 'error',
+            })
+        }
+    );
+}
+
 </script>
 
 
@@ -453,11 +470,16 @@ const sortedHistoryList = computed(() => {
             <el-card
                     shadow="hover"
                     class="box-card box-card-user"
-                    v-if="val.role=='user'">
+                    v-if="val.role=='user'"
+                    @click="copyToClipboard(val.content)">
                 <span>{{ val.content }}</span>
             </el-card>
 
-            <el-card shadow="hover" class="box-card box-card-rebot" v-if="val.role=='assistant'">
+            <el-card
+                    shadow="hover"
+                    class="box-card box-card-rebot"
+                    v-if="val.role=='assistant'"
+                    @click="copyToClipboard(val.content)">
                 <span>{{ val.content }}</span>
             </el-card>
         </div>
