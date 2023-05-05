@@ -323,7 +323,7 @@ export async function wsHandler(url, data, ok, err, close) {
         });
 
         ws.addEventListener("close", (event) => {
-            close && close("服务器连接关闭");
+            // close && close("服务器连接关闭");
             ws.close();
         });
     } else {
