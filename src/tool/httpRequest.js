@@ -4,8 +4,8 @@ import {setHistoryDetail, setHistoryList, setRole, setToken} from "./operateLoca
 
 const config =
     {
-        "Url": "http://localhost:7299",
-        "WsUrl": "ws://localhost:7299",
+        "Url": "https://aichat-back.ccrui.cn",
+        "WsUrl": "wss://aichat-back.ccrui.cn",
         "Login": "/User/Login",
         "Register": "/User/Register",
         "ResetPassword": "/User/ResetPassword",
