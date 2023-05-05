@@ -4,8 +4,8 @@ import {setHistoryDetail, setHistoryList, setRole, setToken} from "./operateLoca
 
 const config =
     {
-        "Url": "https://aichat-back.ccrui.cn",
-        "WsUrl": "wss://aichat-back.ccrui.cn",
+        "Url": "http://localhost:7299",
+        "WsUrl": "ws://localhost:7299",
         "Login": "/User/Login",
         "Register": "/User/Register",
         "ResetPassword": "/User/ResetPassword",
@@ -323,7 +323,7 @@ export async function wsHandler(url, data, ok, err, close) {
         });
 
         ws.addEventListener("close", (event) => {
-            close && close("服务器连接关闭");
+            // close && close("服务器连接关闭");
             ws.close();
         });
     } else {

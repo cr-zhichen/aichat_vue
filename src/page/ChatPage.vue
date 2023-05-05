@@ -54,6 +54,22 @@ const questionInputDisabled = ref(false);
 
 const role = ref("");
 
+//当前模型
+const modelId = ref(0)
+// 模型列表
+const modelNameList = ref([
+    {
+        id: 0,
+        name: "gpt3.5",
+        modelName: "gpt-3.5-turbo"
+    },
+    {
+        id: 1,
+        name: "gpt4(10倍计费)",
+        modelName: "gpt-4"
+    }
+])
+
 //vue加载完后执行
 onMounted(() => {
 
@@ -305,7 +321,8 @@ const sendMsg = () => {
                 messages: questionInput.value,
                 chatHistory: id.value == '' ? null : id.value
             },
-            token: getToken()
+            token: getToken(),
+            modelName: modelNameList.value.find(item => item.id == modelId.value).modelName
         },
         () => {
             questionInputDisabled.value = true;
@@ -440,6 +457,18 @@ const copyToClipboard = (copyToClipboard) => {
     );
 }
 
+//切换模型
+const changeModel = (o) => {
+    if (role.value == '0') {
+        ElNotification({
+            title: '游客无法使用此模型',
+            type: 'error',
+        })
+        return;
+    }
+    modelId.value = o;
+}
+
 </script>
 
 
@@ -487,10 +516,12 @@ const copyToClipboard = (copyToClipboard) => {
         />
 
         <el-affix target="#chatPage" :offset="80">
-            <el-alert title="游客用户每日限制10条消息，无法使用历史记录联想功能，限制回复字数" type="warning" center
+            <el-alert title="游客用户每日限制10条消息，无法使用历史记录联想功能与gpt4模型，并限制回复字数" type="warning"
+                      center
                       :closable="true" v-if="role==='0'" style="margin-top: 10px;"/>
 
-            <el-alert title="普通用户每日免费10条消息，每24小时重置提问次数，购买会员可增加次数" type="warning" center
+            <el-alert title="普通用户每日免费10条消息，每24小时重置提问次数，gpt4模型限制回复字数，购买会员可增加次数，并解除限制"
+                      type="warning" center
                       :closable="true" v-if="role==='1'" style="margin-top: 10px"/>
         </el-affix>
 
@@ -523,6 +554,25 @@ const copyToClipboard = (copyToClipboard) => {
         <div class="chatPage-affix-btns">
             <el-button type="primary" plain @click="newChat();">新建会话</el-button>
             <el-button type="info" plain @click="dialogTableVisible=true" v-if="role!=0">查看历史记录</el-button>
+            <el-dropdown placement="top" class="chatPage-affix-btns-dropdown">
+                <el-button type="primary">
+                    {{ modelNameList.find(item => item.id == modelId).name }}
+                    <el-icon class="el-icon--right">
+                        <arrow-down/>
+                    </el-icon>
+                </el-button>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item
+                                v-for="(value, key, index) in modelNameList"
+                                :key="value.id"
+                                @click.native="changeModel(value.id)"
+                        >
+                            {{ value.name }}
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
         </div>
     </div>
 
@@ -561,6 +611,10 @@ const copyToClipboard = (copyToClipboard) => {
 #chatPage-table-btns {
     text-align: center;
     margin-top: 30px;
+}
+
+.chatPage-affix-btns-dropdown {
+    margin-left: 10px;
 }
 
 .box-card-user {
