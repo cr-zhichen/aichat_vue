@@ -520,9 +520,10 @@ const changeModel = (o) => {
                       center
                       :closable="true" v-if="role==='0'" style="margin-top: 10px;"/>
 
-            <el-alert title="普通用户每日免费10条消息，每24小时重置提问次数，gpt4模型限制回复字数，购买会员可增加次数，并解除限制"
-                      type="warning" center
-                      :closable="true" v-if="role==='1'" style="margin-top: 10px"/>
+            <el-alert
+                    title="普通用户每日免费10条消息，每24小时重置提问次数，gpt4模型限制回复字数，购买会员可增加次数，并解除限制"
+                    type="warning" center
+                    :closable="true" v-if="role==='1'" style="margin-top: 10px"/>
         </el-affix>
 
         <div v-for="(val, key, index) in historyDetail">

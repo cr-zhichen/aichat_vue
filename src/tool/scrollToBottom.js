@@ -1,11 +1,22 @@
 export function scrollToBottom() {
-    (function smoothscroll() {
-        const currentScroll = document.documentElement.scrollTop || document.body.scrollTop; // 已经被卷掉的高度
-        const clientHeight = document.documentElement.clientHeight; // 浏览器高度
-        const scrollHeight = document.documentElement.scrollHeight; // 总高度
-        if (scrollHeight - 10 > currentScroll + clientHeight) {
-            window.requestAnimationFrame(smoothscroll);
-            window.scrollTo(0, currentScroll + (scrollHeight - currentScroll - clientHeight) / 2);
-        }
-    })();
+    if (isUserNearBottom()) {
+        (function smoothscroll() {
+            const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            const clientHeight = document.documentElement.clientHeight;
+            const scrollHeight = document.documentElement.scrollHeight;
+            if (scrollHeight - 10 > currentScroll + clientHeight) {
+                window.requestAnimationFrame(smoothscroll);
+                window.scrollTo(0, currentScroll + (scrollHeight - currentScroll - clientHeight) / 2);
+            }
+        })();
+    }
+}
+
+function isUserNearBottom() {
+    const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+    const clientHeight = document.documentElement.clientHeight;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const threshold = 50; // 可以根据需要自行调整，用于判断用户是否在页面底部附近
+
+    return (scrollHeight - currentScroll - clientHeight) <= threshold;
 }

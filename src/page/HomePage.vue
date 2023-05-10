@@ -18,7 +18,7 @@ const goToUser = useGoToUser();
                 class="box-card">
             <h2>欢迎使用AI Chat</h2>
             <p>
-                本网站，接入ChatGPT API，可以快速体验ChatGPT
+                本站已支持GPT3.5和GPT4.0双模型
             </p>
             <p>
                 点击下方按钮，即可快速体验ChatGPT
