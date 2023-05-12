@@ -23,7 +23,7 @@ import {
     deleteAllChatRecordTask,
     deleteChatRecordTask,
     findAllChatRecordTask, getChatRecordTask,
-    touristsTask, wsChatTask, wsCloseTask
+    touristsTask, wsChatTask, wsCloseTask, wsFinishTask, wsOnlineTask
 } from "../tool/httpRequest.js";
 import {ElLoading, ElMessage, ElNotification} from "element-plus";
 import {useGoToChat, useGoToChatWithId, useGoToHome} from "../router/goToRouter.js";
@@ -469,6 +469,14 @@ const changeModel = (o) => {
     modelId.value = o;
 }
 
+//每三秒执行一次发送ws在线消息
+const sendWsOnlineMsg = () => {
+    wsOnlineTask()
+}
+
+//每三秒执行一次发送ws在线消息
+const sendWsOnlineMsgTask = setInterval(sendWsOnlineMsg, 3000);
+
 </script>
 
 
@@ -555,6 +563,7 @@ const changeModel = (o) => {
         <div class="chatPage-affix-btns">
             <el-button type="primary" plain @click="newChat();">新建会话</el-button>
             <el-button type="info" plain @click="dialogTableVisible=true" v-if="role!=0">查看历史记录</el-button>
+            <el-button type="danger" plain @click="wsFinishTask()">停止输出</el-button>
             <el-dropdown placement="top" class="chatPage-affix-btns-dropdown">
                 <el-button type="primary">
                     {{ modelNameList.find(item => item.id == modelId).name }}

@@ -4,8 +4,8 @@ import {setHistoryDetail, setHistoryList, setRole, setToken} from "./operateLoca
 
 const config =
     {
-        "Url": "https://aichat-back.ccrui.cn",
-        "WsUrl": "wss://aichat-back.ccrui.cn",
+        "Url": "http://localhost:7299",
+        "WsUrl": "ws://localhost:7299",
         "Login": "/User/Login",
         "Register": "/User/Register",
         "ResetPassword": "/User/ResetPassword",
@@ -271,6 +271,20 @@ export async function findAllChatRecordTask(token, start, ok, err, end) {
 
 let ws; // 在外部声明 WebSocket 实例
 
+//ws 发送在线消息
+export async function wsOnlineTask() {
+    if (ws) {
+        ws.send("[Online]");
+    }
+}
+
+//ws 发送停止消息
+export async function wsFinishTask() {
+    if (ws) {
+        ws.send("[Finish]");
+    }
+}
+
 // ws 聊天方法
 export async function wsChatTask(request, start, ok, err, tokenErr, close, end) {
     start && start();
@@ -338,6 +352,7 @@ export async function wsHandler(url, data, ok, err, close) {
 //关闭ws
 export async function wsCloseTask() {
     if (ws && ws.readyState === WebSocket.OPEN) {
+        await wsFinishTask();
         ws.close();
     }
 }
