@@ -1,11 +1,12 @@
 //axios
 import axios from 'axios';
 import {setHistoryDetail, setHistoryList, setRole, setToken} from "./operateLocalStorage.js";
+import {ElMessage} from "element-plus";
 
 const config =
     {
-        "Url": "http://localhost:7299",
-        "WsUrl": "ws://localhost:7299",
+        "Url": "https://aichat-back.ccrui.cn",
+        "WsUrl": "wss://aichat-back.ccrui.cn",
         "Login": "/User/Login",
         "Register": "/User/Register",
         "ResetPassword": "/User/ResetPassword",
@@ -273,14 +274,18 @@ let ws; // 在外部声明 WebSocket 实例
 
 //ws 发送在线消息
 export async function wsOnlineTask() {
-    if (ws) {
+    if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send("[Online]");
     }
 }
 
 //ws 发送停止消息
 export async function wsFinishTask() {
-    if (ws) {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ElMessage({
+            message: '停止命令已发送，等待服务器响应！',
+            type: 'success',
+        });
         ws.send("[Finish]");
     }
 }

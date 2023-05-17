@@ -27,7 +27,7 @@ import {
 } from "../tool/httpRequest.js";
 import {ElLoading, ElMessage, ElNotification} from "element-plus";
 import {useGoToChat, useGoToChatWithId, useGoToHome} from "../router/goToRouter.js";
-import {scrollToBottom} from "../tool/scrollToBottom.js";
+import {scrollToBottom, scrollToBottomForce} from "../tool/scrollToBottom.js";
 
 // 将marked 引入
 import {marked} from 'marked';
@@ -331,8 +331,11 @@ const sendMsg = () => {
                 content: "等待服务器响应，请稍后...",
             })
             isFirst.value = true;
-            //将页面滚动到最底部
-            setTimeout(scrollToBottom, 100);
+            //延迟
+            setTimeout(() => {
+                //将页面滚动到最底部
+                scrollToBottomForce();
+            }, 100);
         },
         (o) => {
             if (isFirst.value) {
@@ -558,32 +561,35 @@ const sendWsOnlineMsgTask = setInterval(sendWsOnlineMsg, 3000);
 
     </div>
 
-
     <div class="chatPage-affix-01">
-        <div class="chatPage-affix-btns">
-            <el-button type="primary" plain @click="newChat();">新建会话</el-button>
-            <el-button type="info" plain @click="dialogTableVisible=true" v-if="role!=0">查看历史记录</el-button>
-            <el-button type="danger" plain @click="wsFinishTask()">停止输出</el-button>
-            <el-dropdown placement="top" class="chatPage-affix-btns-dropdown">
-                <el-button type="primary">
-                    {{ modelNameList.find(item => item.id == modelId).name }}
-                    <el-icon class="el-icon--right">
-                        <arrow-down/>
-                    </el-icon>
+        <el-scrollbar style="width: 100%; height: 100%">
+            <div class="chatPage-affix-btns">
+                <el-button type="primary" plain @click="newChat();" class="scrollbar-demo-item">新建会话</el-button>
+                <el-button type="info" plain @click="dialogTableVisible=true" v-if="role!=0"
+                           class="scrollbar-demo-item">查看历史记录
                 </el-button>
-                <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item
-                                v-for="(value, key, index) in modelNameList"
-                                :key="value.id"
-                                @click.native="changeModel(value.id)"
-                        >
-                            {{ value.name }}
-                        </el-dropdown-item>
-                    </el-dropdown-menu>
-                </template>
-            </el-dropdown>
-        </div>
+                <el-button type="danger" plain @click="wsFinishTask()" class="scrollbar-demo-item">停止输出</el-button>
+                <el-dropdown placement="top" class="chatPage-affix-btns-dropdown scrollbar-demo-item">
+                    <el-button type="primary">
+                        {{ modelNameList.find(item => item.id == modelId).name }}
+                        <el-icon class="el-icon--right">
+                            <arrow-down/>
+                        </el-icon>
+                    </el-button>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item
+                                    v-for="(value, key, index) in modelNameList"
+                                    :key="value.id"
+                                    @click.native="changeModel(value.id)"
+                            >
+                                {{ value.name }}
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+            </div>
+        </el-scrollbar>
     </div>
 
     <div class="chatPage-affix-02">
@@ -625,6 +631,7 @@ const sendWsOnlineMsgTask = setInterval(sendWsOnlineMsg, 3000);
 
 .chatPage-affix-btns-dropdown {
     margin-left: 10px;
+    margin-right: 10px;
 }
 
 .box-card-user {
@@ -661,6 +668,19 @@ const sendWsOnlineMsgTask = setInterval(sendWsOnlineMsg, 3000);
     display: flex;
     justify-content: left;
     align-items: center;
+}
+
+.chatPage-affix-btns {
+    display: flex;
+}
+
+.scrollbar-demo-item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 4px;
 }
 
 </style>

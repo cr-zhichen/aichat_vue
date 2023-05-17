@@ -12,6 +12,20 @@ export function scrollToBottom() {
     }
 }
 
+//强制滚动到底部
+export function scrollToBottomForce() {
+    //不判断用户是否在最下面
+    (function smoothscroll() {
+        const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+        const clientHeight = document.documentElement.clientHeight;
+        const scrollHeight = document.documentElement.scrollHeight;
+        if (scrollHeight - 10 > currentScroll + clientHeight) {
+            window.requestAnimationFrame(smoothscroll);
+            window.scrollTo(0, currentScroll + (scrollHeight - currentScroll - clientHeight) / 2);
+        }
+    })();
+}
+
 function isUserNearBottom() {
     const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
     const clientHeight = document.documentElement.clientHeight;
