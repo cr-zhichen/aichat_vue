@@ -21,7 +21,10 @@ const goToUser = useGoToUser();
                 本站已支持GPT3.5和GPT4.0双模型
             </p>
             <p>
-                点击下方按钮，即可快速体验ChatGPT
+                GPT4.0因成本原因，暂时采取30倍计费
+            </p>
+            <p>
+                本站不保证GPT4.0模型可长期使用
             </p>
             <br>
             <div v-if="getToken()==null">

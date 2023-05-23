@@ -135,7 +135,7 @@ const activation = ref(() => {
 
 //跳转到购买页面
 const goToBuy = ref(() => {
-    window.open("https://www.zuuu.vip/links/8F4F80E9");
+    window.open("https://buy.ccrui.cn/");
 });
 
 //退出登录

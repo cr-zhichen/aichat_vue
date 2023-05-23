@@ -65,7 +65,7 @@ const modelNameList = ref([
     },
     {
         id: 1,
-        name: "gpt4(10倍计费)",
+        name: "gpt4(30倍计费)",
         modelName: "gpt-4"
     }
 ])
